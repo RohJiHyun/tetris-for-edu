@@ -99,16 +99,16 @@ class tetris():
 
     #키보드 입력값 처리 함수
     def key_handler(self, key):
-        if key == self.KEY_LEFT: #왼쪽으로 움직이기
+        if 1 == key[self.KEY_LEFT]: #왼쪽으로 움직이기
             self.move(-1, 0)
-        elif key == self.KEY_RIGHT: # 오른쪽으로 움직이기
+        elif 1 == key[self.KEY_RIGHT]: # 오른쪽으로 움직이기
             self.move(1, 0)
-        elif key == self.KEY_DOWN: #아래로 한칸 내리기
+        elif 1 == key[self.KEY_DOWN]: #아래로 한칸 내리기
             self.move(0, 1)
-        elif key == self.KEY_UP: #회전
+        elif 1 == key[self.KEY_UP]: #회전
             self.current_block=self.rotate(self.current_block, self.x, self.y)
-        elif key == self.KEY_SPACE: #아래로 내리기
-            while move(0, 1) :
+        elif 1 == key[self.KEY_SPACE]: #아래로 내리기
+            while self.move(0, 1) :
                 pass
         
 
@@ -116,7 +116,7 @@ class tetris():
     #블록 이동
     def move(self, move_x, move_y):
         
-        if self.collision_detect(block, self.x+move_x, self.y+move_y):
+        if self.collision_detect(self.current_block, self.x+move_x, self.y+move_y):
             if move_y :
                 self.adapt_block()
                 return False
@@ -129,9 +129,16 @@ class tetris():
     def adapt_block(self):
         for row in range(len(self.current_block)):
             for col in range(len(self.current_block[0])):
-                if current_block[row][col] == 1 : 
+                if self.current_block[row][col] == 1 : 
                     self.board[ self.y + row ][ self.x + col ] = 2
         self.clear_line()
+        self.current_block, self.current_block_color = self.next_block, self.next_block_color
+        self.next_block, self.next_block_color = self.new_block()
+        self.x = self.start_point_x
+        self.y = self.start_point_y
+        if self.collision_detect(self.current_block, self.x, self.y) :
+            self.game_state = False
+
 
     #블록생성 함수
     def new_block(self):
@@ -150,9 +157,9 @@ class tetris():
         
         #블록회전 구현
         rotate_block = copy.deepcopy(block)
-        for row in range(len(block)):
-            for col in range(len(block[0])):
-                rotate_block[row][col] = block[col][row]
+        for old_row, new_col in zip(range(len(block)), range(len(block[0])-1,-1,-1)):
+            for old_col, new_row in zip(range(len(block[0])), range(len(block))):
+                rotate_block[new_row][new_col] = block[old_row][old_col]
         
         
         #회전했는데 충돌이 일어나면 블록을 못돌리게 한다.
@@ -167,29 +174,43 @@ class tetris():
     def collision_detect(self, block, x, y):
         for row in range(len(block)):
             for col in range(len(block[0])):
-                if (self.board[y+row][x+col] == 2 or self.board[y+row][x+col] == 3) and block[row][col] == 1 : #3이나 2가 블록 1번과 겹친다면 충돌 감지 됨.
+                total_x = x + col
+                total_y = y + row
+                if total_y > len(self.board)-1 or total_y < 0 or total_x > len(self.board[0])-1 or total_x < 0:
+                    continue
+                
+                elif (self.board[total_y][total_x] == 2 or self.board[total_y][total_x] == 3) and block[row][col] == 1 : #3이나 2가 블록 1번과 겹친다면 충돌 감지 됨.
                     return True
         return False
 
     #블록이 바닥에 도달되면 줄을 지울 때 사용하는 함수
     def clear_line(self):
-        count = 0
         remove_list=[]
         #한 줄마다 체크합니다.
-        for row in range(self.y, self.y+len(self.block_group[0][0])):
-            
+        for row in range(self.y, self.y+len(self.current_block)):
+            count = 0
+
             for col in range(len(self.board[0])) :
+                if (row > len(self.board)-1 or row < 0)or (col > len(self.board[0])-1 or col < 0 ):
+                    continue
                 if self.board[row][col] == 2 :
                     count += 1
             #보드가 꽉 차면 지울 행을 리스트에 저장합니다.
-            if len(self.board)-2 == count :
+            print("count:", count)
+            print(len(self.board))
+            if len(self.board[0])-2 == count :
                 remove_list.append(row)
         
         #리스트를 지우고 추가합니다.
+        print(remove_list)
         for row in remove_list:
-            self.board.remove(row)
+        
+        
+
+            self.board.remove(self.board[row])
+            
             self.board.insert(1, copy.deepcopy(self.empty_line))
-            add_score(len(remove_list))
+            self.add_score(len(remove_list))
 
     #점수 올리는 함수
     def add_score(self, stack):
@@ -203,8 +224,7 @@ class tetris():
         while self.game_state == True : 
             start_time=time.time()
             gametools.draw(self)
-            gametools.update(self)
-            print("test")
+            gametools.update(self)           
             end_time = time.time()
             delta_time = end_time - start_time
             if delta_time < self.FRAME_TIME:
