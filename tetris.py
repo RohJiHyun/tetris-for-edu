@@ -74,8 +74,8 @@ board = [
 
 class tetris():
 
-    def __init__(self, block_group, list: board):
-        
+    def __init__(self, name, block_group, list: board):
+        self.name = name
         self.block_group = copy.deepcopy(block_group)
         self.empty_line = copy.deepcopy(board[1])
         self.FRAME_TIME = 1/45

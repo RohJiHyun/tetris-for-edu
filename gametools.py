@@ -20,7 +20,10 @@ SHADOW_COLOR_MAP = [
         pygame.Color(100, 0, 255, 255),
         pygame.Color(100, 255, 140, 0)
         ]
-        
+G_WAIT = 0 
+G_READY = 1
+G_PLAYING = 2
+G_GAMEOVER = 3
     
 #필요 상수
         
