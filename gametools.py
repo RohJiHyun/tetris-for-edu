@@ -62,7 +62,7 @@ def gameinitializer(self, title, board, start_x = 0, start_y = 0):
     pygame.font.init() # you have to call this at the start, 
                    # if you want to use this module.
     self.myfont = pygame.font.SysFont('Comic Sans MS', self.screen_width//70)
-    self.screen = pygame.display.set_mode((int(self.screen_width//2), int(self.screen_height//2)))
+    self.screen = pygame.display.set_mode((int(self.screen_width//3.5), int(self.screen_height//2)))
     pygame.display.set_caption(title)
     self.screen.fill(self.color_map[1])
     print("[sys] : pygame now be initialized.")
