@@ -80,16 +80,16 @@ class GameRoom(Thread):
                     for m in players:
                         if self.player_statelist[m] == gametools.G_READY : 
                             ready_checker += 1
-            
+            print("pass")
+
+
+            self.send_message_all()
             if ready_checker == len(self.player_statelist) : 
-                import copy
-                player_statelist =copy.deepcopy(self.player_statelist)
-                player_statelist['state'] = gametools.G_PLAYING
-                for m in players:
-                    self.player[m].send_message(json.dumps(self.player_statelist))
+                self.game_state = PLAYING
                 break
-        
-        self.game_state = PLAYING
+            print("1round")
+            print("2")
+                
         msg= {'addr' : 'server', 'state' : gametools.G_PLAYING}
         for m in players:
             self.player[m].send_message(json.dumps(msg))
@@ -122,7 +122,10 @@ class GameRoom(Thread):
         self.player[addr] = GamePlayer(conn, addr, self.game_buf, self.lock)
         self.player[addr].start()
         self.player_statelist[addr] = gametools.G_WAIT
-        
+
+    def send_message_all(self):
+        for m in self.player:
+                self.player[m].send_message(json.dumps(self.player_statelist))
             
 
                 

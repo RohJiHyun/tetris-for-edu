@@ -48,28 +48,33 @@ block_group = [
         ]
 
 board = [
-            [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
-            [3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3],
-            [3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3],
-            [3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3],
-            [3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3],
-            [3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3],
-            [3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3],
-            [3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3],
-            [3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3],
-            [3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3],
-            [3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3],
-            [3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3],
-            [3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3],
-            [3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3],
-            [3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3],
-            [3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3],
-            [3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3],
-            [3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3],
-            [3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3],
-            [3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3],
-            [3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3],
-            [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3]
+            [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
+            [3,0,0,0,0,0,0,0,0,0,0,0,0,0,3],
+            [3,0,0,0,0,0,0,0,0,0,0,0,0,0,3],
+            [3,0,0,0,0,0,0,0,0,0,0,0,0,0,3],
+            [3,0,0,0,0,0,0,0,0,0,0,0,0,0,3],
+            [3,0,0,0,0,0,0,0,0,0,0,0,0,0,3],
+            [3,0,0,0,0,0,0,0,0,0,0,0,0,0,3],
+            [3,0,0,0,0,0,0,0,0,0,0,0,0,0,3],
+            [3,0,0,0,0,0,0,0,0,0,0,0,0,0,3],
+            [3,0,0,0,0,0,0,0,0,0,0,0,0,0,3],
+            [3,0,0,0,0,0,0,0,0,0,0,0,0,0,3],
+            [3,0,0,0,0,0,0,0,0,0,0,0,0,0,3],
+            [3,0,0,0,0,0,0,0,0,0,0,0,0,0,3],
+            [3,0,0,0,0,0,0,0,0,0,0,0,0,0,3],
+            [3,0,0,0,0,0,0,0,0,0,0,0,0,0,3],
+            [3,0,0,0,0,0,0,0,0,0,0,0,0,0,3],
+            [3,0,0,0,0,0,0,0,0,0,0,0,0,0,3],
+            [3,0,0,0,0,0,0,0,0,0,0,0,0,0,3],
+            [3,0,0,0,0,0,0,0,0,0,0,0,0,0,3],
+            [3,0,0,0,0,0,0,0,0,0,0,0,0,0,3],
+            [3,0,0,0,0,0,0,0,0,0,0,0,0,0,3],
+            [3,0,0,0,0,0,0,0,0,0,0,0,0,0,3],
+            [3,0,0,0,0,0,0,0,0,0,0,0,0,0,3],
+            [3,0,0,0,0,0,0,0,0,0,0,0,0,0,3],
+            [3,0,0,0,0,0,0,0,0,0,0,0,0,0,3],
+            [3,0,0,0,0,0,0,0,0,0,0,0,0,0,3],
+            [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3]
         ]
 
 class tetris():
@@ -92,7 +97,7 @@ class tetris():
         self.x = self.start_point_x
         self.y = self.start_point_y
 
-        self.game_state = True
+        self.game_state = gametools.G_WAIT
 
         self.next_block, self.next_block_color = self.new_block()
         self.current_block, self.current_block_color = self.new_block()
@@ -110,7 +115,7 @@ class tetris():
         elif 1 == key[self.KEY_SPACE]: #아래로 내리기
             while self.move(0, 1) :
                 pass
-        
+            
 
         
     #블록 이동
@@ -196,13 +201,10 @@ class tetris():
                 if self.board[row][col] == 2 :
                     count += 1
             #보드가 꽉 차면 지울 행을 리스트에 저장합니다.
-            print("count:", count)
-            print(len(self.board))
             if len(self.board[0])-2 == count :
                 remove_list.append(row)
         
         #리스트를 지우고 추가합니다.
-        print(remove_list)
         for row in remove_list:
         
         
@@ -221,7 +223,7 @@ class tetris():
 
         import time
         self.loop_checker = 1
-        while self.game_state == True : 
+        while self.game_state != gametools.G_GAMEOVER : 
             start_time=time.time()
             gametools.draw(self)
             gametools.update(self)           
@@ -230,11 +232,33 @@ class tetris():
             if delta_time < self.FRAME_TIME:
                 time.sleep(self.FRAME_TIME - delta_time)
             self.loop_checker += 1
+        gametools.lazy_waiting(self)
         
-
+    def serialize(self):
+        msg = dict()
+        msg['state'] = self.game_state
+        msg['score'] = self.score
+        msg['cureent_block'] = self.current_block
+        msg['current_color'] = self.current_block_color
+        msg['next_block'] = self.next_block
+        msg['next_block_color'] = self.next_block_color
+        msg['map'] = self.board
+        msg['x'] = self.X
+        msg['y'] = self.y
+        msg['y'] = self.rotate
+        msg = json.dumps(msg)
+        return msg
     
+    def deserialize(self):
+        self.score = msg['score']
+        self.current_block = msg['block'] 
+        self.current_block =msg['state'] 
+        self.current_block_color= msg['current_block_color']
+        self.board=msg['map'] 
+        self.X=msg['x']
+        self.y=msg['y']
+        self.rotate=msg['rotate']
 
-            
 
 a=tetris("tet",block_group,board)
 a.loop()
